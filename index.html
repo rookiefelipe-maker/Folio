@@ -210,46 +210,9 @@ main{padding:8px 32px 100px;max-width:1440px;margin:0 auto;}
 /* ============ QUICK ADD FAB ============ */
 .qa-fab-wrap{
   position:fixed;right:28px;bottom:28px;z-index:110;
-  display:flex;flex-direction:column;align-items:flex-end;gap:16px;
-  pointer-events:none; /* el contenedor no debe capturar clics; solo sus botones */
+  display:flex;flex-direction:column;align-items:flex-end;
 }
 .qa-fab-wrap.is-hidden{display:none;}
-.qa-fab{pointer-events:auto;}
-.qa-scrim{
-  position:fixed;inset:0;z-index:105;background:transparent;
-  opacity:0;pointer-events:none;transition:opacity .15s ease;
-}
-.qa-scrim.open{opacity:1;pointer-events:auto;}
-.qa-speed-dial{
-  display:flex;flex-direction:column;align-items:flex-end;gap:12px;
-  margin-bottom:2px;
-}
-.qa-option{
-  display:flex;align-items:center;gap:10px;
-  opacity:0;transform:translateY(10px) scale(.92);
-  pointer-events:none;
-  transition:opacity .16s ease, transform .16s ease;
-}
-.qa-fab-wrap.open .qa-option{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}
-.qa-fab-wrap.open .qa-option-btn{pointer-events:auto;}
-.qa-fab-wrap.open .qa-option:nth-child(1){transition-delay:.12s;}
-.qa-fab-wrap.open .qa-option:nth-child(2){transition-delay:.08s;}
-.qa-fab-wrap.open .qa-option:nth-child(3){transition-delay:.04s;}
-.qa-fab-wrap.open .qa-option:nth-child(4){transition-delay:0s;}
-.qa-option-label{
-  background:var(--surface);border:1px solid var(--border-strong);color:var(--text);
-  font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px;
-  white-space:nowrap;box-shadow:var(--shadow);
-}
-.qa-option-btn{
-  width:46px;height:46px;flex-shrink:0;border-radius:50%;
-  background:var(--surface);border:1px solid var(--border-strong);color:var(--text);
-  display:flex;align-items:center;justify-content:center;font-size:18px;
-  cursor:pointer;box-shadow:var(--shadow);
-  transition:transform .15s ease, border-color .15s ease, color .15s ease;
-}
-.qa-option-btn:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
-.qa-option-btn:active{transform:scale(.92);}
 .qa-fab{
   width:58px;height:58px;border-radius:50%;border:none;
   background:var(--accent);color:#181205;
@@ -259,11 +222,28 @@ main{padding:8px 32px 100px;max-width:1440px;margin:0 auto;}
 }
 .qa-fab:hover{filter:brightness(1.07);}
 .qa-fab:active{transform:scale(.93);}
-.qa-fab-icon{
-  display:block;font-size:26px;line-height:1;font-weight:600;
-  transition:transform .22s ease;
+.qa-fab[aria-expanded="true"]{transform:rotate(45deg);}
+.qa-fab-icon{display:block;font-size:26px;line-height:1;font-weight:600;}
+
+/* ============ QUICK ADD — POPUP DE OPCIONES (centrado) ============ */
+.qa-menu-modal{max-width:420px;}
+.qa-menu-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:14px;
 }
-.qa-fab-wrap.open .qa-fab-icon{transform:rotate(45deg);}
+.qa-option{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  padding:20px 12px;border-radius:var(--radius-sm);
+  background:var(--surface-2);border:1px solid var(--border);color:var(--text);
+  cursor:pointer;transition:transform .15s ease, border-color .15s ease, color .15s ease, background .15s ease;
+}
+.qa-option:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
+.qa-option:active{transform:scale(.96);}
+.qa-option .qa-option-btn{
+  width:46px;height:46px;border-radius:50%;
+  background:var(--surface);border:1px solid var(--border-strong);
+  display:flex;align-items:center;justify-content:center;font-size:18px;color:inherit;
+}
+.qa-option .qa-option-label{font-size:13px;font-weight:600;color:inherit;}
 
 /* ============ MODALS ============ */
 .overlay{
@@ -588,11 +568,13 @@ main{padding:8px 32px 100px;max-width:1440px;margin:0 auto;}
   .header-actions .btn .btn-txt{display:none;}
   .header-actions .btn{padding:10px 14px;}
 
-  .qa-fab-wrap{right:16px;bottom:calc(16px + env(safe-area-inset-bottom));gap:12px;}
+  .qa-fab-wrap{right:16px;bottom:calc(16px + env(safe-area-inset-bottom));}
   .qa-fab{width:54px;height:54px;}
   .qa-fab-icon{font-size:23px;}
-  .qa-option-btn{width:44px;height:44px;font-size:17px;}
-  .qa-option-label{font-size:12.5px;padding:6px 12px;}
+  .qa-menu-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+  .qa-option{padding:16px 10px;}
+  .qa-option .qa-option-btn{width:42px;height:42px;font-size:17px;}
+  .qa-option .qa-option-label{font-size:12.5px;}
 }
 
 @media(max-width:400px){
@@ -983,30 +965,41 @@ main{padding:8px 32px 100px;max-width:1440px;margin:0 auto;}
   </div>
 </div>
 
-<!-- ============ QUICK ADD (FAB + speed dial) ============ -->
-<div class="qa-scrim" id="qaScrim"></div>
+<!-- ============ QUICK ADD (FAB) ============ -->
 <div class="qa-fab-wrap" id="qaFabWrap">
-  <div class="qa-speed-dial" id="qaSpeedDial">
-    <div class="qa-option" data-qa-type="character">
-      <span class="qa-option-label">Personaje</span>
-      <button type="button" class="qa-option-btn" aria-label="Añadir personaje">◆</button>
-    </div>
-    <div class="qa-option" data-qa-type="connection">
-      <span class="qa-option-label">Conexión</span>
-      <button type="button" class="qa-option-btn" aria-label="Añadir conexión">🔗</button>
-    </div>
-    <div class="qa-option" data-qa-type="location">
-      <span class="qa-option-label">Lugar</span>
-      <button type="button" class="qa-option-btn" aria-label="Añadir lugar">⌖</button>
-    </div>
-    <div class="qa-option" data-qa-type="note">
-      <span class="qa-option-label">Nota</span>
-      <button type="button" class="qa-option-btn" aria-label="Añadir nota">🗒</button>
-    </div>
-  </div>
-  <button type="button" class="qa-fab" id="qaFabBtn" aria-haspopup="true" aria-expanded="false" aria-label="Quick Add" title="Quick Add">
+  <button type="button" class="qa-fab" id="qaFabBtn" aria-haspopup="dialog" aria-expanded="false" aria-label="Quick Add" title="Quick Add">
     <span class="qa-fab-icon">+</span>
   </button>
+</div>
+
+<!-- ============ QUICK ADD — POPUP DE OPCIONES ============ -->
+<div class="overlay" id="qaMenuOverlay">
+  <div class="modal qa-menu-modal">
+    <div class="modal-head">
+      <h2>Añadir…</h2>
+      <button type="button" class="close-x" data-close="qaMenuOverlay" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="qa-menu-grid" id="qaSpeedDial">
+        <button type="button" class="qa-option" data-qa-type="character">
+          <span class="qa-option-btn" aria-hidden="true">◆</span>
+          <span class="qa-option-label">Personaje</span>
+        </button>
+        <button type="button" class="qa-option" data-qa-type="connection">
+          <span class="qa-option-btn" aria-hidden="true">🔗</span>
+          <span class="qa-option-label">Conexión</span>
+        </button>
+        <button type="button" class="qa-option" data-qa-type="location">
+          <span class="qa-option-btn" aria-hidden="true">⌖</span>
+          <span class="qa-option-label">Lugar</span>
+        </button>
+        <button type="button" class="qa-option" data-qa-type="note">
+          <span class="qa-option-btn" aria-hidden="true">🗒</span>
+          <span class="qa-option-label">Nota</span>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ============ QUICK ADD — FORMULARIO ============ -->
@@ -1282,8 +1275,16 @@ let db = normalizeDB(loadDB());
    ============================================================ */
 function $(sel, ctx){ return (ctx||document).querySelector(sel); }
 function $all(sel, ctx){ return Array.from((ctx||document).querySelectorAll(sel)); }
-function openOverlay(id){ $('#'+id).classList.add('open'); updateFabVisibility(); }
-function closeOverlay(id){ $('#'+id).classList.remove('open'); updateFabVisibility(); }
+function openOverlay(id){
+  $('#'+id).classList.add('open');
+  if(id==='qaMenuOverlay') $('#qaFabBtn').setAttribute('aria-expanded','true');
+  updateFabVisibility();
+}
+function closeOverlay(id){
+  $('#'+id).classList.remove('open');
+  if(id==='qaMenuOverlay') $('#qaFabBtn').setAttribute('aria-expanded','false');
+  updateFabVisibility();
+}
 function fmtDate(d){ if(!d) return '—'; const dt=new Date(d+'T00:00:00'); if(isNaN(dt)) return d; return dt.toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'}); }
 function pct(book){ if(!book.totalPages) return 0; return Math.min(100, Math.round((book.currentPage/book.totalPages)*100)); }
 function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),2200); }
@@ -2447,37 +2448,25 @@ let qaType = null;
 function updateFabVisibility(){
   // El botón de Quick Add se oculta en Ajustes y en cualquier diálogo que ya cubre la
   // pantalla o es un formulario propio (añadir/editar libro, búsqueda, ficha de personaje,
-  // mapa de relaciones, y el propio formulario de Quick Add), para no flotar encima de ellos.
+  // mapa de relaciones, el propio formulario de Quick Add, y su popup de opciones),
+  // para no flotar encima de ellos.
   // Permanece visible en la biblioteca y en el detalle del libro: las dos pantallas
   // principales donde tiene sentido registrar algo mientras se lee.
-  const hideOn = ['settingsOverlay','bookModalOverlay','spotlightOverlay','treeOverlay','charProfileOverlay','qaFormOverlay'];
+  const hideOn = ['settingsOverlay','bookModalOverlay','spotlightOverlay','treeOverlay','charProfileOverlay','qaFormOverlay','qaMenuOverlay'];
   const shouldHide = hideOn.some(id=> $('#'+id).classList.contains('open'));
   $('#qaFabWrap').classList.toggle('is-hidden', shouldHide);
-  if(shouldHide) closeSpeedDial();
+  if(shouldHide) closeQaMenu();
 }
 
 function qaActiveBookId(){
   return $('#detailModalOverlay').classList.contains('open') ? currentDetailId : null;
 }
 
-function toggleSpeedDial(){ $('#qaFabWrap').classList.contains('open') ? closeSpeedDial() : openSpeedDial(); }
-function openSpeedDial(){
-  $('#qaFabWrap').classList.add('open');
-  $('#qaFabBtn').setAttribute('aria-expanded','true');
-  $('#qaScrim').classList.add('open');
-}
-function closeSpeedDial(){
-  $('#qaFabWrap').classList.remove('open');
-  $('#qaFabBtn').setAttribute('aria-expanded','false');
-  $('#qaScrim').classList.remove('open');
-}
-$('#qaFabBtn').addEventListener('click', toggleSpeedDial);
-$('#qaScrim').addEventListener('click', closeSpeedDial);
+function openQaMenu(){ openOverlay('qaMenuOverlay'); }
+function closeQaMenu(){ closeOverlay('qaMenuOverlay'); }
+$('#qaFabBtn').addEventListener('click', openQaMenu);
 $all('.qa-option', $('#qaSpeedDial')).forEach(opt=>{
-  opt.addEventListener('click', ()=>{ closeSpeedDial(); openQuickAdd(opt.dataset.qaType); });
-});
-document.addEventListener('keydown', e=>{
-  if(e.key==='Escape' && $('#qaFabWrap').classList.contains('open')) closeSpeedDial();
+  opt.addEventListener('click', ()=>{ closeQaMenu(); openQuickAdd(opt.dataset.qaType); });
 });
 
 function qaBookOptions(selectedId){
