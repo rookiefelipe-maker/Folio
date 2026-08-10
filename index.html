@@ -207,6 +207,61 @@ main{padding:8px 32px 80px;max-width:1440px;margin:0 auto;}
 }
 .empty-state h3{font-family:var(--font-display);color:var(--text);font-size:22px;margin-bottom:8px;}
 
+/* ============ QUICK ADD FAB ============ */
+.qa-fab-wrap{
+  position:fixed;right:28px;bottom:28px;z-index:110;
+  display:flex;flex-direction:column;align-items:flex-end;gap:16px;
+}
+.qa-fab-wrap.is-hidden{display:none;}
+.qa-scrim{
+  position:fixed;inset:0;z-index:105;background:transparent;
+  opacity:0;pointer-events:none;transition:opacity .15s ease;
+}
+.qa-scrim.open{opacity:1;pointer-events:auto;}
+.qa-speed-dial{
+  display:flex;flex-direction:column;align-items:flex-end;gap:12px;
+  margin-bottom:2px;
+}
+.qa-option{
+  display:flex;align-items:center;gap:10px;
+  opacity:0;transform:translateY(10px) scale(.92);
+  pointer-events:none;
+  transition:opacity .16s ease, transform .16s ease;
+}
+.qa-fab-wrap.open .qa-option{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}
+.qa-fab-wrap.open .qa-option:nth-child(1){transition-delay:.12s;}
+.qa-fab-wrap.open .qa-option:nth-child(2){transition-delay:.08s;}
+.qa-fab-wrap.open .qa-option:nth-child(3){transition-delay:.04s;}
+.qa-fab-wrap.open .qa-option:nth-child(4){transition-delay:0s;}
+.qa-option-label{
+  background:var(--surface);border:1px solid var(--border-strong);color:var(--text);
+  font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px;
+  white-space:nowrap;box-shadow:var(--shadow);
+}
+.qa-option-btn{
+  width:46px;height:46px;flex-shrink:0;border-radius:50%;
+  background:var(--surface);border:1px solid var(--border-strong);color:var(--text);
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+  cursor:pointer;box-shadow:var(--shadow);
+  transition:transform .15s ease, border-color .15s ease, color .15s ease;
+}
+.qa-option-btn:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
+.qa-option-btn:active{transform:scale(.92);}
+.qa-fab{
+  width:58px;height:58px;border-radius:50%;border:none;
+  background:var(--accent);color:#181205;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;box-shadow:0 14px 30px -8px rgba(0,0,0,.5), 0 2px 8px rgba(0,0,0,.25);
+  transition:transform .22s cubic-bezier(.34,1.56,.64,1), filter .15s ease;
+}
+.qa-fab:hover{filter:brightness(1.07);}
+.qa-fab:active{transform:scale(.93);}
+.qa-fab-icon{
+  display:block;font-size:26px;line-height:1;font-weight:600;
+  transition:transform .22s ease;
+}
+.qa-fab-wrap.open .qa-fab-icon{transform:rotate(45deg);}
+
 /* ============ MODALS ============ */
 .overlay{
   position:fixed;inset:0;background:rgba(10,11,16,.62);backdrop-filter:blur(3px);
@@ -249,6 +304,15 @@ main{padding:8px 32px 80px;max-width:1440px;margin:0 auto;}
 .field textarea{resize:vertical;min-height:70px;}
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.field-hint{font-size:12px;color:var(--text-faint);margin-top:6px;}
+.field-hint.warn{color:var(--danger);}
+.modal.modal-sm{max-width:420px;}
+.qa-context-line{
+  display:flex;align-items:center;gap:8px;margin-bottom:16px;
+  padding:9px 12px;background:var(--surface-2);border-radius:var(--radius-sm);
+  font-size:12.5px;color:var(--text-dim);
+}
+.qa-context-line b{color:var(--text);font-weight:600;}
 .cover-picker{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
 .cover-preview{width:70px;height:105px;border-radius:8px;background:var(--surface-2);overflow:hidden;flex-shrink:0;}
 .cover-preview img{width:100%;height:100%;object-fit:cover;}
@@ -363,10 +427,23 @@ main{padding:8px 32px 80px;max-width:1440px;margin:0 auto;}
 .tree-node.is-focus circle{stroke:var(--accent);stroke-width:4px;}
 .tree-node text{font-family:var(--font-body);font-size:11.5px;fill:var(--text);pointer-events:none;}
 .tree-node .initial{font-family:var(--font-display);font-weight:700;pointer-events:none;}
-.tree-edge{stroke:var(--border-strong);stroke-width:1.6px;}
+.tree-node.is-indirect{opacity:.5;}
+.tree-edge{stroke:var(--border-strong);stroke-width:1.6px;fill:none;}
+.tree-edge.directed{stroke:var(--accent);stroke-opacity:.75;}
+.tree-edge.is-indirect{stroke-dasharray:4 4;opacity:.45;}
+.edge-label-group{transition:opacity .15s ease;}
+.edge-label-group.is-indirect{opacity:.55;}
 .edge-label-group rect{fill:var(--bg-2);}
 .edge-label-group text{font-family:var(--font-body);font-size:9.5px;fill:var(--text-faint);pointer-events:none;}
 .tree-empty{padding:80px 20px;text-align:center;color:var(--text-faint);}
+.map-legend{
+  position:absolute;bottom:14px;left:14px;z-index:5;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;max-width:calc(100% - 28px);
+  background:var(--surface);border:1px solid var(--border);border-radius:999px;
+  padding:7px 14px;box-shadow:var(--shadow);font-size:11px;color:var(--text-faint);
+}
+.map-legend .lg-item{display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.map-legend svg{flex-shrink:0;overflow:visible;}
 
 /* map controls */
 .map-wrap{position:relative;width:100%;height:100%;}
@@ -387,6 +464,12 @@ main{padding:8px 32px 80px;max-width:1440px;margin:0 auto;}
 }
 .mode-toggle button.active{background:var(--accent-soft);color:var(--accent);}
 .map-controls label.chk{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-dim);white-space:nowrap;cursor:pointer;}
+.conn-dir-select{
+  background:none;border:1px solid var(--border);border-radius:999px;
+  color:var(--text-faint);font-family:inherit;font-size:11px;padding:4px 8px;cursor:pointer;
+}
+.conn-item .conn-type .dir-arrow{color:var(--accent);font-weight:700;margin-right:3px;}
+.qp-conn-item .dir-arrow{color:var(--accent);font-weight:700;margin-right:3px;}
 
 /* quick profile side panel over the map */
 .quick-profile-panel{
@@ -501,6 +584,12 @@ main{padding:8px 32px 80px;max-width:1440px;margin:0 auto;}
 
   .header-actions .btn .btn-txt{display:none;}
   .header-actions .btn{padding:10px 14px;}
+
+  .qa-fab-wrap{right:16px;bottom:calc(16px + env(safe-area-inset-bottom));gap:12px;}
+  .qa-fab{width:54px;height:54px;}
+  .qa-fab-icon{font-size:23px;}
+  .qa-option-btn{width:44px;height:44px;font-size:17px;}
+  .qa-option-label{font-size:12.5px;padding:6px 12px;}
 }
 
 @media(max-width:400px){
@@ -859,8 +948,13 @@ main{padding:8px 32px 80px;max-width:1440px;margin:0 auto;}
           </div>
           <input type="text" id="mapSearchInput" placeholder="Buscar personaje…">
           <label class="chk"><input type="checkbox" id="mapDirectOnlyChk"> Solo conexiones directas</label>
+          <div class="mode-toggle" id="focusDepthToggle" style="display:none;">
+            <button type="button" data-depth="1" id="depthDirectBtn">Solo directas</button>
+            <button type="button" data-depth="2" id="depthIndirectBtn">Directas + indirectas</button>
+          </div>
         </div>
         <svg id="treeSvg" viewBox="0 0 900 600"></svg>
+        <div class="map-legend" id="mapLegend"></div>
         <div class="quick-profile-panel" id="quickProfilePanel">
           <button class="qp-close" id="qpCloseBtn">✕</button>
           <div id="quickProfileBody"></div>
@@ -886,6 +980,47 @@ main{padding:8px 32px 80px;max-width:1440px;margin:0 auto;}
   </div>
 </div>
 
+<!-- ============ QUICK ADD (FAB + speed dial) ============ -->
+<div class="qa-scrim" id="qaScrim"></div>
+<div class="qa-fab-wrap" id="qaFabWrap">
+  <div class="qa-speed-dial" id="qaSpeedDial">
+    <div class="qa-option" data-qa-type="character">
+      <span class="qa-option-label">Personaje</span>
+      <button type="button" class="qa-option-btn" aria-label="Añadir personaje">◆</button>
+    </div>
+    <div class="qa-option" data-qa-type="connection">
+      <span class="qa-option-label">Conexión</span>
+      <button type="button" class="qa-option-btn" aria-label="Añadir conexión">🔗</button>
+    </div>
+    <div class="qa-option" data-qa-type="location">
+      <span class="qa-option-label">Lugar</span>
+      <button type="button" class="qa-option-btn" aria-label="Añadir lugar">⌖</button>
+    </div>
+    <div class="qa-option" data-qa-type="note">
+      <span class="qa-option-label">Nota</span>
+      <button type="button" class="qa-option-btn" aria-label="Añadir nota">🗒</button>
+    </div>
+  </div>
+  <button type="button" class="qa-fab" id="qaFabBtn" aria-haspopup="true" aria-expanded="false" aria-label="Quick Add" title="Quick Add">
+    <span class="qa-fab-icon">+</span>
+  </button>
+</div>
+
+<!-- ============ QUICK ADD — FORMULARIO ============ -->
+<div class="overlay" id="qaFormOverlay">
+  <div class="modal modal-sm">
+    <div class="modal-head">
+      <h2 id="qaFormTitle">Añadir</h2>
+      <button class="close-x" data-close="qaFormOverlay">✕</button>
+    </div>
+    <div class="modal-body" id="qaFormBody"></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" data-close="qaFormOverlay">Cancelar</button>
+      <button class="btn btn-primary" id="qaCreateBtn">Crear</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -904,6 +1039,7 @@ let mapFocusId = null;
 let mapSearchQuery = '';
 let mapDirectOnly = false;
 let mapSelectedId = null;
+let mapFocusDepth = 1; // 1 = solo conexiones directas del foco, 2 = directas + indirectas (hasta 2 saltos)
 
 const DEFAULT_SETTINGS = {
   language:'es', confirmDelete:true, openLast:false,
@@ -976,6 +1112,9 @@ function normalizeRelation(r){
   r = Object.assign({}, r);
   if(!r.id) r.id = uid();
   if(r.description===undefined || r.description===null) r.description='';
+  if(r.direction!=='forward' && r.direction!=='backward' && r.direction!=='mutual'){
+    r.direction = RELATION_DEFAULT_DIRECTION[r.type] || 'mutual';
+  }
   if(!r.revealedAt || typeof r.revealedAt!=='object'){
     r.revealedAt = {chapter:'', page:''};
   } else {
@@ -1093,8 +1232,6 @@ function seedBooks(){
   ];
 }
 
-let db = normalizeDB(loadDB());
-
 /* ============================================================
    PERSONAJES: género y tipos de conexión
    ============================================================ */
@@ -1121,14 +1258,29 @@ function relationLabel(type, gender){
   const r = RELATION_TYPES[type]; if(!r) return '';
   if(gender==='M') return r.m; if(gender==='F') return r.f; return r.n;
 }
+// Dirección por defecto según el tipo: 'forward' = fromId -> toId, 'backward' = toId -> fromId,
+// 'mutual' = sin dirección. El usuario puede cambiarla libremente al crear/editar la conexión.
+const RELATION_DEFAULT_DIRECTION = {
+  mentor:'forward', student:'backward',
+  parent:'forward', child:'backward',
+  sibling:'mutual', partner:'mutual', friend:'mutual', enemy:'mutual', ally:'mutual', other:'mutual'
+};
+// Flecha relativa a un personaje concreto ('→' si él es el origen, '←' si es el destino, '↔' si es mutua)
+function relDirectionArrow(r, viewerId){
+  if(r.direction==='mutual') return '↔';
+  const forwardFromViewer = (r.direction==='backward') ? (r.toId===viewerId) : (r.fromId===viewerId);
+  return forwardFromViewer ? '→' : '←';
+}
+
+let db = normalizeDB(loadDB());
 
 /* ============================================================
    UTILIDADES UI
    ============================================================ */
 function $(sel, ctx){ return (ctx||document).querySelector(sel); }
 function $all(sel, ctx){ return Array.from((ctx||document).querySelectorAll(sel)); }
-function openOverlay(id){ $('#'+id).classList.add('open'); }
-function closeOverlay(id){ $('#'+id).classList.remove('open'); }
+function openOverlay(id){ $('#'+id).classList.add('open'); updateFabVisibility(); }
+function closeOverlay(id){ $('#'+id).classList.remove('open'); updateFabVisibility(); }
 function fmtDate(d){ if(!d) return '—'; const dt=new Date(d+'T00:00:00'); if(isNaN(dt)) return d; return dt.toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'}); }
 function pct(book){ if(!book.totalPages) return 0; return Math.min(100, Math.round((book.currentPage/book.totalPages)*100)); }
 function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),2200); }
@@ -1556,6 +1708,11 @@ function renderCharacterProfile(){
       <div class="add-conn-form" id="addConnForm">
         <div class="field"><label>Relacionar con</label><select id="connTargetSel"></select></div>
         <div class="field"><label>Tipo</label><select id="connTypeSel"></select></div>
+        <div class="field"><label>Dirección</label><select id="connDirectionSel">
+          <option value="forward"></option>
+          <option value="backward"></option>
+          <option value="mutual">Mutua (sin dirección)</option>
+        </select></div>
         <div class="field"><label>Descripción opcional</label><input type="text" id="connDescInput"></div>
         <div class="field-row">
           <div class="field"><label>Desde — capítulo</label><input type="text" id="connChapterInput"></div>
@@ -1568,14 +1725,29 @@ function renderCharacterProfile(){
   `;
   renderCharConnList();
   const targetSel = $('#connTargetSel');
+  const typeSel = $('#connTypeSel');
+  const dirSel = $('#connDirectionSel');
   targetSel.innerHTML = b.characters.filter(x=>x.id!==c.id).map(x=>`<option value="${x.id}">${escapeHtml(x.name)}</option>`).join('');
-  $('#connTypeSel').innerHTML = Object.keys(RELATION_TYPES).map(k=>`<option value="${k}">${RELATION_TYPES[k].select}</option>`).join('');
+  typeSel.innerHTML = Object.keys(RELATION_TYPES).map(k=>`<option value="${k}">${RELATION_TYPES[k].select}</option>`).join('');
+
+  // Las etiquetas "A → B" / "B → A" del selector de dirección usan los nombres reales
+  // de los dos personajes implicados, y se actualizan si cambia el personaje elegido.
+  function refreshDirLabels(){
+    const target = b.characters.find(x=>x.id===targetSel.value);
+    const targetName = target ? target.name : '…';
+    dirSel.options[0].textContent = `${c.name} → ${targetName}`;
+    dirSel.options[1].textContent = `${targetName} → ${c.name}`;
+  }
+  refreshDirLabels();
+  dirSel.value = RELATION_DEFAULT_DIRECTION[typeSel.value] || 'mutual';
 
   $('#toggleAddConnBtn').addEventListener('click', ()=> $('#addConnForm').classList.toggle('open'));
+  targetSel.addEventListener('change', refreshDirLabels);
+  typeSel.addEventListener('change', ()=>{ dirSel.value = RELATION_DEFAULT_DIRECTION[typeSel.value] || 'mutual'; });
   $('#createConnBtn').addEventListener('click', ()=>{
     const toId = targetSel.value; if(!toId){ toast('Elige un personaje'); return; }
     b.relations.push({
-      id:uid(), fromId:c.id, toId, type:$('#connTypeSel').value,
+      id:uid(), fromId:c.id, toId, type:typeSel.value, direction:dirSel.value,
       description:$('#connDescInput').value.trim(),
       revealedAt:{chapter:$('#connChapterInput').value.trim(), page:$('#connPageInput').value?Number($('#connPageInput').value):''}
     });
@@ -1585,7 +1757,7 @@ function renderCharacterProfile(){
   });
   $('#viewInMapBtn').addEventListener('click', ()=>{
     closeOverlay('charProfileOverlay');
-    mapMode = 'focus'; mapFocusId = c.id;
+    mapMode = 'focus'; mapFocusId = c.id; mapFocusDepth = 1;
     openOverlay('treeOverlay'); renderMap();
   });
 }
@@ -1602,19 +1774,35 @@ function renderCharConnList(){
     if(!other) return '';
     const perspFrom = r.fromId===c.id ? c : other;
     const label = relationLabel(r.type, perspFrom.gender);
+    const arrow = relDirectionArrow(r, c.id);
     return `<div class="conn-item" data-conn-id="${r.id}" data-other-id="${other.id}">
       <div class="conn-main">
         <div><b>${escapeHtml(other.name)}</b></div>
-        <div class="conn-type">${label}${pfLoc(r.revealedAt) ? ' · '+pfLoc(r.revealedAt) : ''}</div>
+        <div class="conn-type"><span class="dir-arrow">${arrow}</span>${label}${pfLoc(r.revealedAt) ? ' · '+pfLoc(r.revealedAt) : ''}</div>
         ${r.description ? `<div class="conn-desc">${escapeHtml(r.description)}</div>` : ''}
       </div>
-      <div class="conn-actions"><button data-del-conn="${r.id}" title="Eliminar">✕</button></div>
+      <div class="conn-actions">
+        <select class="conn-dir-select" data-dir-conn="${r.id}" title="Cambiar dirección">
+          <option value="forward" ${r.direction==='forward'?'selected':''}>${escapeHtml(c.name)} → ${escapeHtml(other.name)}</option>
+          <option value="backward" ${r.direction==='backward'?'selected':''}>${escapeHtml(other.name)} → ${escapeHtml(c.name)}</option>
+          <option value="mutual" ${r.direction==='mutual'?'selected':''}>Mutua</option>
+        </select>
+        <button data-del-conn="${r.id}" title="Eliminar">✕</button>
+      </div>
     </div>`;
   }).join('');
   $all('.conn-item .conn-main', el).forEach(main=>{
     main.addEventListener('click', ()=>{
       const item = main.closest('.conn-item');
       openCharacterProfile(item.dataset.otherId);
+    });
+  });
+  $all('[data-dir-conn]', el).forEach(sel=>{
+    sel.addEventListener('click', e=> e.stopPropagation());
+    sel.addEventListener('change', e=>{
+      e.stopPropagation();
+      const r = b.relations.find(x=>x.id===sel.dataset.dirConn);
+      if(r){ r.direction = sel.value; saveDB(); renderCharConnList(); }
     });
   });
   $all('[data-del-conn]', el).forEach(btn=>{
@@ -1785,16 +1973,32 @@ function svgPoint(svg, evt){
 function buildMapData(b){
   const q = mapSearchQuery.trim().toLowerCase();
   let charIds;
+  let depthById = null; // solo en modo focus: 0=personaje foco, 1=conexión directa, 2=conexión indirecta (2 saltos)
 
   if(mapMode==='focus'){
     if(!mapFocusId || !b.characters.some(c=>c.id===mapFocusId)) mapFocusId = b.characters[0] ? b.characters[0].id : null;
     if(!mapFocusId) return {nodes:[], edges:[]};
-    const neighborIds = new Set([mapFocusId]);
+
+    depthById = {};
+    depthById[mapFocusId] = 0;
+    const directIds = new Set();
     b.relations.forEach(r=>{
-      if(r.fromId===mapFocusId) neighborIds.add(r.toId);
-      if(r.toId===mapFocusId) neighborIds.add(r.fromId);
+      if(r.fromId===mapFocusId) directIds.add(r.toId);
+      if(r.toId===mapFocusId) directIds.add(r.fromId);
     });
-    charIds = Array.from(neighborIds);
+    directIds.forEach(id=>{ depthById[id] = 1; });
+
+    // Las conexiones indirectas nunca se guardan: se calculan aquí recorriendo el grafo
+    // hasta 2 saltos a partir del personaje en foco, y sólo si el usuario activó esa vista.
+    if(mapFocusDepth>=2){
+      const indirectIds = new Set();
+      b.relations.forEach(r=>{
+        if(directIds.has(r.fromId) && r.toId!==mapFocusId && !directIds.has(r.toId)) indirectIds.add(r.toId);
+        if(directIds.has(r.toId) && r.fromId!==mapFocusId && !directIds.has(r.fromId)) indirectIds.add(r.fromId);
+      });
+      indirectIds.forEach(id=>{ if(depthById[id]===undefined) depthById[id] = 2; });
+    }
+    charIds = Object.keys(depthById);
   } else {
     charIds = b.characters.map(c=>c.id);
     if(mapDirectOnly && mapSelectedId){
@@ -1816,14 +2020,38 @@ function buildMapData(b){
     }
   }
 
-  const nodes = b.characters.filter(c=>charIds.includes(c.id)).map(c=>({id:c.id, name:c.name, gender:c.gender||''}));
+  const nodes = b.characters.filter(c=>charIds.includes(c.id)).map(c=>({
+    id:c.id, name:c.name, gender:c.gender||'',
+    depth: depthById ? depthById[c.id] : 0
+  }));
+  const nodeById = {}; nodes.forEach(n=> nodeById[n.id]=n);
   const nodeIdSet = new Set(nodes.map(n=>n.id));
-  const edges = b.relations.map(r=>({
-    from:r.fromId, to:r.toId,
-    label: RELATION_TYPES[r.type] ? RELATION_TYPES[r.type].edge : ''
-  })).filter(e=> nodeIdSet.has(e.from) && nodeIdSet.has(e.to));
+  const edges = b.relations.map(r=>{
+    const a = nodeById[r.fromId], c2 = nodeById[r.toId];
+    // Una arista es "indirecta" sólo cuando conecta con un personaje a 2 saltos del foco;
+    // las conexiones directas guardadas entre el foco y sus vecinos siempre se ven completas.
+    const isIndirect = !!(depthById && a && c2 && (a.depth===2 || c2.depth===2));
+    return {
+      from:r.fromId, to:r.toId,
+      direction: (r.direction==='forward'||r.direction==='backward') ? r.direction : 'mutual',
+      label: RELATION_TYPES[r.type] ? RELATION_TYPES[r.type].edge : '',
+      isIndirect
+    };
+  }).filter(e=> nodeIdSet.has(e.from) && nodeIdSet.has(e.to));
 
   return {nodes, edges};
+}
+
+const NODE_R = 28;
+const EDGE_PAD = NODE_R + 5; // deja hueco entre el nodo y el extremo de la línea, para que la flecha se vea
+
+// Acorta una línea entre dos centros de nodo EDGE_PAD desde cada extremo, para que
+// la punta de flecha quede visible fuera del círculo en vez de tapada por él.
+function shrinkLine(ax, ay, cx, cy, pad){
+  const dx = cx-ax, dy = cy-ay;
+  const dist = Math.sqrt(dx*dx+dy*dy) || 0.01;
+  const ux = dx/dist, uy = dy/dist;
+  return { x1: ax+ux*pad, y1: ay+uy*pad, x2: cx-ux*pad, y2: cy-uy*pad };
 }
 
 function renderMap(){
@@ -1832,7 +2060,12 @@ function renderMap(){
   $('#treeTitle').textContent = `Mapa de relaciones — ${b.title}`;
   $('#mapModeFocusBtn').classList.toggle('active', mapMode==='focus');
   $('#mapModeWorldBtn').classList.toggle('active', mapMode==='world');
+  $('#mapDirectOnlyChk').closest('label').style.display = mapMode==='world' ? '' : 'none';
   $('#mapDirectOnlyChk').checked = mapDirectOnly;
+  $('#focusDepthToggle').style.display = mapMode==='focus' ? '' : 'none';
+  $('#depthDirectBtn').classList.toggle('active', mapFocusDepth===1);
+  $('#depthIndirectBtn').classList.toggle('active', mapFocusDepth===2);
+  renderMapLegend();
   closeQuickProfile();
 
   const container = $('#treeBody');
@@ -1842,15 +2075,24 @@ function renderMap(){
   const svgEl = $('#treeSvg');
   svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
 
+  const DEFS = `<defs>
+    <marker id="arrowDirect" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"></path>
+    </marker>
+    <marker id="arrowIndirect" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--text-faint)"></path>
+    </marker>
+  </defs>`;
+
   if(!b.characters.length){
-    svgEl.innerHTML = `<text x="${W/2}" y="${H/2}" text-anchor="middle" fill="var(--text-faint)" font-size="13">Todavía no hay personajes en este libro. Agregá alguno en la pestaña "Personajes" primero.</text>`;
+    svgEl.innerHTML = DEFS + `<text x="${W/2}" y="${H/2}" text-anchor="middle" fill="var(--text-faint)" font-size="13">Todavía no hay personajes en este libro. Agregá alguno en la pestaña "Personajes" primero.</text>`;
     return;
   }
 
   const {nodes, edges} = buildMapData(b);
 
   if(!nodes.length){
-    svgEl.innerHTML = `<text x="${W/2}" y="${H/2}" text-anchor="middle" fill="var(--text-faint)" font-size="13">Sin resultados</text>`;
+    svgEl.innerHTML = DEFS + `<text x="${W/2}" y="${H/2}" text-anchor="middle" fill="var(--text-faint)" font-size="13">Sin resultados</text>`;
     return;
   }
 
@@ -1858,12 +2100,18 @@ function renderMap(){
   fitNodesToBounds(nodes, W, H, 110);
   const nodeById = {}; nodes.forEach(n=> nodeById[n.id]=n);
 
-  let markup = '';
+  let markup = DEFS;
   edges.forEach((e,i)=>{
     const a = nodeById[e.from], c = nodeById[e.to];
     const mx = (a.x+c.x)/2, my = (a.y+c.y)/2;
-    markup += `<line class="tree-edge" data-edge="e${i}" data-from="${e.from}" data-to="${e.to}" x1="${a.x}" y1="${a.y}" x2="${c.x}" y2="${c.y}"></line>`;
-    markup += `<g class="edge-label-group" data-edge="e${i}" transform="translate(${mx},${my})">
+    const {x1,y1,x2,y2} = shrinkLine(a.x, a.y, c.x, c.y, EDGE_PAD);
+    const isDirected = e.direction!=='mutual';
+    const marker = isDirected ? (e.isIndirect ? 'url(#arrowIndirect)' : 'url(#arrowDirect)') : '';
+    const markerAttr = !isDirected ? '' :
+      (e.direction==='forward' ? `marker-end="${marker}"` : `marker-start="${marker}"`);
+    const cls = ['tree-edge', isDirected?'directed':'', e.isIndirect?'is-indirect':''].filter(Boolean).join(' ');
+    markup += `<line class="${cls}" data-edge="e${i}" data-from="${e.from}" data-to="${e.to}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" ${markerAttr}></line>`;
+    markup += `<g class="edge-label-group${e.isIndirect?' is-indirect':''}" data-edge="e${i}" transform="translate(${mx},${my})">
       <rect x="${-(e.label.length*3.4+8)}" y="-9" width="${e.label.length*6.8+16}" height="18" rx="9"></rect>
       <text text-anchor="middle" dy="4">${escapeHtml(e.label)}</text>
     </g>`;
@@ -1872,8 +2120,9 @@ function renderMap(){
     const color = TREE_COLORS[n.gender] || TREE_COLORS[''];
     const initial = (n.name||'?').charAt(0).toUpperCase();
     const isFocus = mapMode==='focus' && n.id===mapFocusId;
-    markup += `<g class="tree-node${isFocus?' is-focus':''}" data-id="${n.id}" transform="translate(${n.x},${n.y})">
-      <circle r="28" fill="${color}"></circle>
+    const isIndirectNode = n.depth===2;
+    markup += `<g class="tree-node${isFocus?' is-focus':''}${isIndirectNode?' is-indirect':''}" data-id="${n.id}" transform="translate(${n.x},${n.y})">
+      <circle r="${NODE_R}" fill="${color}"></circle>
       <text class="initial" text-anchor="middle" dy="6" fill="#14161F" font-size="17">${escapeHtml(initial)}</text>
       <text text-anchor="middle" dy="46" font-size="13">${escapeHtml(n.name)}</text>
     </g>`;
@@ -1893,9 +2142,12 @@ function renderMap(){
         const n = nodeById[id]; n.x = p.x; n.y = p.y;
         g.setAttribute('transform', `translate(${p.x},${p.y})`);
         $all(`.tree-edge[data-from="${id}"], .tree-edge[data-to="${id}"]`, svgEl).forEach(line=>{
-          if(line.dataset.from===id){ line.setAttribute('x1', p.x); line.setAttribute('y1', p.y); }
-          else { line.setAttribute('x2', p.x); line.setAttribute('y2', p.y); }
-          const other = nodeById[line.dataset.from===id ? line.dataset.to : line.dataset.from];
+          const otherId = line.dataset.from===id ? line.dataset.to : line.dataset.from;
+          const other = nodeById[otherId];
+          const fromN = nodeById[line.dataset.from], toN = nodeById[line.dataset.to];
+          const {x1,y1,x2,y2} = shrinkLine(fromN.x, fromN.y, toN.x, toN.y, EDGE_PAD);
+          line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+          line.setAttribute('x2', x2); line.setAttribute('y2', y2);
           const mx=(p.x+other.x)/2, my=(p.y+other.y)/2;
           const lg = $(`.edge-label-group[data-edge="${line.dataset.edge}"]`, svgEl);
           if(lg) lg.setAttribute('transform', `translate(${mx},${my})`);
@@ -1909,6 +2161,18 @@ function renderMap(){
       g.addEventListener('pointerup', onUp);
     });
   });
+}
+
+function renderMapLegend(){
+  const el = $('#mapLegend'); if(!el) return;
+  const arrow = (id)=> `<svg width="22" height="10" viewBox="0 0 22 10"><defs><marker id="${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"></path></marker></defs><line x1="1" y1="5" x2="19" y2="5" stroke="currentColor" stroke-width="1.6" marker-end="url(#${id})"></line></svg>`;
+  let html = `
+    <div class="lg-item" style="color:var(--accent);">${arrow('lg-arrow')}<span style="color:var(--text-faint);">Relación dirigida</span></div>
+    <div class="lg-item"><svg width="22" height="10" viewBox="0 0 22 10"><line x1="1" y1="5" x2="21" y2="5" stroke="var(--border-strong)" stroke-width="1.6"></line></svg><span>Relación mutua</span></div>`;
+  if(mapMode==='focus' && mapFocusDepth===2){
+    html += `<div class="lg-item"><svg width="22" height="10" viewBox="0 0 22 10"><line x1="1" y1="5" x2="21" y2="5" stroke="var(--text-faint)" stroke-width="1.6" stroke-dasharray="4 4"></line></svg><span>Conexión indirecta (2 saltos)</span></div>`;
+  }
+  el.innerHTML = html;
 }
 
 function onMapNodeClick(id){
@@ -1938,7 +2202,7 @@ function openQuickProfile(charId){
       const other = b.characters.find(x=>x.id===otherId);
       if(!other) return '';
       const perspFrom = r.fromId===c.id ? c : other;
-      return `<div class="qp-conn-item"><span>${escapeHtml(other.name)}</span><span class="t">${relationLabel(r.type, perspFrom.gender)}</span></div>`;
+      return `<div class="qp-conn-item"><span>${escapeHtml(other.name)}</span><span class="t"><span class="dir-arrow">${relDirectionArrow(r, c.id)}</span>${relationLabel(r.type, perspFrom.gender)}</span></div>`;
     }).join('') : `<p class="relations-empty">Sin conexiones.</p>`}
     <div class="qp-actions">
       <button class="btn btn-ghost btn-sm" id="qpOpenProfileBtn">Open full profile</button>
@@ -1947,7 +2211,7 @@ function openQuickProfile(charId){
   `;
   $('#quickProfilePanel').classList.add('open');
   $('#qpOpenProfileBtn').addEventListener('click', ()=>{ closeOverlay('treeOverlay'); openCharacterProfile(c.id); });
-  $('#qpFocusBtn').addEventListener('click', ()=>{ mapMode='focus'; mapFocusId=c.id; renderMap(); });
+  $('#qpFocusBtn').addEventListener('click', ()=>{ mapMode='focus'; mapFocusId=c.id; mapFocusDepth=1; renderMap(); });
 }
 $('#qpCloseBtn').addEventListener('click', closeQuickProfile);
 
@@ -1955,11 +2219,13 @@ $('#mapModeFocusBtn').addEventListener('click', ()=>{ mapMode='focus'; renderMap
 $('#mapModeWorldBtn').addEventListener('click', ()=>{ mapMode='world'; renderMap(); });
 $('#mapSearchInput').addEventListener('input', e=>{ mapSearchQuery = e.target.value; renderMap(); });
 $('#mapDirectOnlyChk').addEventListener('change', e=>{ mapDirectOnly = e.target.checked; renderMap(); });
+$('#depthDirectBtn').addEventListener('click', ()=>{ mapFocusDepth = 1; renderMap(); });
+$('#depthIndirectBtn').addEventListener('click', ()=>{ mapFocusDepth = 2; renderMap(); });
 
 $('#openTreeBtn').addEventListener('click', ()=>{
   const b = getBook(currentDetailId);
   if(!b) return;
-  mapMode = 'focus'; mapFocusId = null; mapSearchQuery=''; $('#mapSearchInput').value='';
+  mapMode = 'focus'; mapFocusId = null; mapSearchQuery=''; $('#mapSearchInput').value=''; mapFocusDepth = 1;
   openOverlay('treeOverlay');
   renderMap();
 });
@@ -2170,10 +2436,181 @@ function renderSpotlightResults(q){
 }
 
 /* ============================================================
+   QUICK ADD (FAB flotante + speed dial)
+   ============================================================ */
+const QA_LABELS = { character:'Personaje', connection:'Conexión', location:'Lugar', note:'Nota' };
+let qaType = null;
+
+function updateFabVisibility(){
+  // El botón de Quick Add se oculta en Ajustes y en cualquier diálogo que ya cubre la
+  // pantalla o es un formulario propio (añadir/editar libro, búsqueda, ficha de personaje,
+  // mapa de relaciones, y el propio formulario de Quick Add), para no flotar encima de ellos.
+  // Permanece visible en la biblioteca y en el detalle del libro: las dos pantallas
+  // principales donde tiene sentido registrar algo mientras se lee.
+  const hideOn = ['settingsOverlay','bookModalOverlay','spotlightOverlay','treeOverlay','charProfileOverlay','qaFormOverlay'];
+  const shouldHide = hideOn.some(id=> $('#'+id).classList.contains('open'));
+  $('#qaFabWrap').classList.toggle('is-hidden', shouldHide);
+  if(shouldHide) closeSpeedDial();
+}
+
+function qaActiveBookId(){
+  return $('#detailModalOverlay').classList.contains('open') ? currentDetailId : null;
+}
+
+function toggleSpeedDial(){ $('#qaFabWrap').classList.contains('open') ? closeSpeedDial() : openSpeedDial(); }
+function openSpeedDial(){
+  $('#qaFabWrap').classList.add('open');
+  $('#qaFabBtn').setAttribute('aria-expanded','true');
+  $('#qaScrim').classList.add('open');
+}
+function closeSpeedDial(){
+  $('#qaFabWrap').classList.remove('open');
+  $('#qaFabBtn').setAttribute('aria-expanded','false');
+  $('#qaScrim').classList.remove('open');
+}
+$('#qaFabBtn').addEventListener('click', toggleSpeedDial);
+$('#qaScrim').addEventListener('click', closeSpeedDial);
+$all('.qa-option', $('#qaSpeedDial')).forEach(opt=>{
+  opt.addEventListener('click', ()=>{ closeSpeedDial(); openQuickAdd(opt.dataset.qaType); });
+});
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape' && $('#qaFabWrap').classList.contains('open')) closeSpeedDial();
+});
+
+function qaBookOptions(selectedId){
+  return db.books.map(b=>`<option value="${b.id}" ${b.id===selectedId?'selected':''}>${escapeHtml(b.title)}</option>`).join('');
+}
+
+function openQuickAdd(type){
+  qaType = type;
+  $('#qaFormTitle').textContent = 'Añadir ' + QA_LABELS[type].toLowerCase();
+  renderQuickAddForm();
+  openOverlay('qaFormOverlay');
+  setTimeout(()=>{ const el = $('#qaFormBody').querySelector('input,select,textarea'); if(el) el.focus(); }, 30);
+}
+
+function renderQuickAddForm(){
+  const body = $('#qaFormBody');
+  const activeId = qaActiveBookId();
+  const book = activeId ? getBook(activeId) : null;
+
+  if(!db.books.length){
+    body.innerHTML = `<p class="field-hint">Todavía no tienes ningún libro en tu biblioteca. Añade uno primero para poder registrar ${QA_LABELS[qaType].toLowerCase()}s.</p>`;
+    $('#qaCreateBtn').style.display = 'none';
+    return;
+  }
+  $('#qaCreateBtn').style.display = '';
+
+  const bookPicker = book
+    ? `<div class="qa-context-line">📖 En: <b>${escapeHtml(book.title)}</b></div>`
+    : `<div class="field"><label>Libro *</label><select id="qaBookSelect">${qaBookOptions(db.books[0].id)}</select></div>`;
+
+  let fieldsHtml = '';
+  if(qaType==='character'){
+    fieldsHtml = `
+      ${bookPicker}
+      <div class="field"><label>Nombre *</label><input type="text" id="qaCharName" placeholder="Nombre del personaje"></div>
+      <div class="field"><label>Descripción</label><input type="text" id="qaCharDesc" placeholder="Opcional"></div>
+    `;
+  } else if(qaType==='location'){
+    fieldsHtml = `
+      ${bookPicker}
+      <div class="field"><label>Nombre del lugar *</label><input type="text" id="qaLocName" placeholder="Nombre del lugar"></div>
+    `;
+  } else if(qaType==='note'){
+    fieldsHtml = `
+      ${bookPicker}
+      <div class="field"><label>Nota *</label><textarea id="qaNoteText" rows="3" placeholder="Escribe una nota…"></textarea></div>
+    `;
+  } else if(qaType==='connection'){
+    fieldsHtml = `${bookPicker}<div id="qaConnFields"></div>`;
+  }
+  body.innerHTML = fieldsHtml;
+
+  if(!book){
+    $('#qaBookSelect').addEventListener('change', ()=>{
+      if(qaType==='connection') renderQaConnFields($('#qaBookSelect').value);
+    });
+  }
+  if(qaType==='connection'){
+    renderQaConnFields(book ? book.id : $('#qaBookSelect').value);
+  }
+}
+
+function renderQaConnFields(bookId){
+  const wrap = $('#qaConnFields'); if(!wrap) return;
+  const b = getBook(bookId);
+  if(!b || b.characters.length < 2){
+    wrap.innerHTML = `<p class="field-hint warn">Este libro necesita al menos 2 personajes para crear una conexión. Añade personajes primero.</p>`;
+    return;
+  }
+  const opts = b.characters.map(c=>`<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
+  wrap.innerHTML = `
+    <div class="field-row">
+      <div class="field"><label>Personaje 1 *</label><select id="qaConnFrom">${opts}</select></div>
+      <div class="field"><label>Personaje 2 *</label><select id="qaConnTo">${opts}</select></div>
+    </div>
+    <div class="field"><label>Tipo de relación</label>
+      <select id="qaConnType">${Object.keys(RELATION_TYPES).map(k=>`<option value="${k}">${RELATION_TYPES[k].select}</option>`).join('')}</select>
+    </div>
+  `;
+  $('#qaConnTo').selectedIndex = Math.min(1, b.characters.length-1);
+}
+
+$('#qaCreateBtn').addEventListener('click', ()=>{
+  if(!qaType) return;
+  const activeId = qaActiveBookId();
+  const bookSelect = $('#qaBookSelect');
+  const bookId = activeId || (bookSelect ? bookSelect.value : null);
+  const b = getBook(bookId);
+  if(!b){ toast('Elige un libro'); return; }
+
+  if(qaType==='character'){
+    const name = $('#qaCharName').value.trim();
+    if(!name){ toast('Escribe un nombre'); return; }
+    b.characters.push({
+      id:uid(), name, gender:'', aliases:'', description:$('#qaCharDesc').value.trim(),
+      occupation:'', role:'', firstAppearance:{chapter:'',page:''}, lastAppearance:{chapter:'',page:''},
+      groupIds:[], locationIds:[], notes:''
+    });
+    toast('Personaje añadido');
+  } else if(qaType==='location'){
+    const name = $('#qaLocName').value.trim();
+    if(!name){ toast('Escribe un nombre'); return; }
+    b.locations.push({id:uid(), name});
+    toast('Lugar añadido');
+  } else if(qaType==='note'){
+    const text = $('#qaNoteText').value.trim();
+    if(!text){ toast('Escribe una nota'); return; }
+    b.notes.push({id:uid(), text});
+    toast('Nota añadida');
+  } else if(qaType==='connection'){
+    const fromSel = $('#qaConnFrom'), toSel = $('#qaConnTo');
+    if(!fromSel || !toSel){ toast('Este libro necesita al menos 2 personajes'); return; }
+    const fromId = fromSel.value, toId = toSel.value;
+    if(fromId===toId){ toast('Elige dos personajes distintos'); return; }
+    const type = $('#qaConnType').value;
+    b.relations.push({
+      id:uid(), fromId, toId, type, direction: RELATION_DEFAULT_DIRECTION[type] || 'mutual',
+      description:'', revealedAt:{chapter:'',page:''}
+    });
+    toast('Conexión creada');
+  }
+
+  saveDB();
+  renderGrid();
+  if(currentDetailId===b.id && $('#detailModalOverlay').classList.contains('open')){
+    renderListPanels(b);
+  }
+  closeOverlay('qaFormOverlay');
+});
+
+/* ============================================================
    INIT
    ============================================================ */
 applyTheme();
 renderGrid();
+updateFabVisibility();
 $('#sortSelect').value = db.settings.library.sort;
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ()=>{ if(db.settings.theme==='system') applyTheme(); });
 if('serviceWorker' in navigator){
