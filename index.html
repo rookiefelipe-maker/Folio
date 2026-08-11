@@ -207,44 +207,6 @@ main{padding:8px 32px 100px;max-width:1440px;margin:0 auto;}
 }
 .empty-state h3{font-family:var(--font-display);color:var(--text);font-size:22px;margin-bottom:8px;}
 
-/* ============ QUICK ADD FAB ============ */
-.qa-fab-wrap{
-  position:fixed;right:28px;bottom:28px;z-index:110;
-  display:flex;flex-direction:column;align-items:flex-end;
-}
-.qa-fab-wrap.is-hidden{display:none;}
-.qa-fab{
-  width:58px;height:58px;border-radius:50%;border:none;
-  background:var(--accent);color:#181205;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;box-shadow:0 14px 30px -8px rgba(0,0,0,.5), 0 2px 8px rgba(0,0,0,.25);
-  transition:transform .22s cubic-bezier(.34,1.56,.64,1), filter .15s ease;
-}
-.qa-fab:hover{filter:brightness(1.07);}
-.qa-fab:active{transform:scale(.93);}
-.qa-fab[aria-expanded="true"]{transform:rotate(45deg);}
-.qa-fab-icon{display:block;font-size:26px;line-height:1;font-weight:600;}
-
-/* ============ QUICK ADD — POPUP DE OPCIONES (centrado) ============ */
-.qa-menu-modal{max-width:420px;}
-.qa-menu-grid{
-  display:grid;grid-template-columns:repeat(2,1fr);gap:14px;
-}
-.qa-option{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
-  padding:20px 12px;border-radius:var(--radius-sm);
-  background:var(--surface-2);border:1px solid var(--border);color:var(--text);
-  cursor:pointer;transition:transform .15s ease, border-color .15s ease, color .15s ease, background .15s ease;
-}
-.qa-option:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
-.qa-option:active{transform:scale(.96);}
-.qa-option .qa-option-btn{
-  width:46px;height:46px;border-radius:50%;
-  background:var(--surface);border:1px solid var(--border-strong);
-  display:flex;align-items:center;justify-content:center;font-size:18px;color:inherit;
-}
-.qa-option .qa-option-label{font-size:13px;font-weight:600;color:inherit;}
-
 /* ============ MODALS ============ */
 .overlay{
   position:fixed;inset:0;background:rgba(10,11,16,.62);backdrop-filter:blur(3px);
@@ -296,6 +258,51 @@ main{padding:8px 32px 100px;max-width:1440px;margin:0 auto;}
   font-size:12.5px;color:var(--text-dim);
 }
 .qa-context-line b{color:var(--text);font-weight:600;}
+
+/* ============ QUICK ADD — FAB flotante ============ */
+.qa-fab-wrap{
+  position:fixed;right:28px;bottom:28px;z-index:150;
+}
+.qa-fab-wrap.is-hidden{display:none;}
+.qa-fab{
+  width:58px;height:58px;border-radius:50%;border:none;
+  background:var(--accent);color:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;box-shadow:0 14px 30px -8px rgba(0,0,0,.5), 0 2px 8px rgba(0,0,0,.25);
+  transition:transform .2s cubic-bezier(.34,1.56,.64,1), filter .15s ease, box-shadow .15s ease;
+}
+.qa-fab:hover{filter:brightness(1.08);box-shadow:0 16px 34px -8px rgba(0,0,0,.55), 0 2px 8px rgba(0,0,0,.3);}
+.qa-fab:active{transform:scale(.92);}
+.qa-fab-icon{display:block;font-size:26px;line-height:1;font-weight:600;transition:transform .2s ease;}
+.qa-fab[aria-expanded="true"] .qa-fab-icon{transform:rotate(45deg);}
+
+/* ============ QUICK ADD — popup de opciones (centrado) ============ */
+.qa-menu-modal{max-width:400px;}
+.qa-menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+.qa-option{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  padding:22px 12px;border-radius:var(--radius-sm);
+  background:var(--surface-2);border:1px solid var(--border);color:var(--text);
+  cursor:pointer;transition:transform .15s ease, border-color .15s ease, color .15s ease, background .15s ease;
+}
+.qa-option:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-3px);}
+.qa-option:active{transform:translateY(-1px) scale(.97);}
+.qa-option-icon{
+  width:44px;height:44px;border-radius:50%;flex-shrink:0;
+  background:var(--surface);border:1px solid var(--border-strong);
+  display:flex;align-items:center;justify-content:center;font-size:18px;color:inherit;
+}
+.qa-option-label{font-size:13px;font-weight:600;color:inherit;}
+
+/* ============ QUICK ADD — modales de creación rápida ============ */
+.qa-quick-modal{max-width:400px;}
+.qa-quick-modal .modal-body{padding-top:18px;}
+.qa-hint{
+  padding:12px 14px;border-radius:var(--radius-sm);background:var(--surface-2);
+  color:var(--text-dim);font-size:13px;line-height:1.5;
+}
+.qa-hint.warn{color:var(--danger);background:var(--danger-soft);}
+.qa-field-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .cover-picker{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
 .cover-preview{width:70px;height:105px;border-radius:8px;background:var(--surface-2);overflow:hidden;flex-shrink:0;}
 .cover-preview img{width:100%;height:100%;object-fit:cover;}
@@ -567,14 +574,6 @@ main{padding:8px 32px 100px;max-width:1440px;margin:0 auto;}
 
   .header-actions .btn .btn-txt{display:none;}
   .header-actions .btn{padding:10px 14px;}
-
-  .qa-fab-wrap{right:16px;bottom:calc(16px + env(safe-area-inset-bottom));}
-  .qa-fab{width:54px;height:54px;}
-  .qa-fab-icon{font-size:23px;}
-  .qa-menu-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
-  .qa-option{padding:16px 10px;}
-  .qa-option .qa-option-btn{width:42px;height:42px;font-size:17px;}
-  .qa-option .qa-option-label{font-size:12.5px;}
 }
 
 @media(max-width:400px){
@@ -965,14 +964,16 @@ main{padding:8px 32px 100px;max-width:1440px;margin:0 auto;}
   </div>
 </div>
 
-<!-- ============ QUICK ADD (FAB) ============ -->
+<div id="toast"></div>
+
+<!-- ============ QUICK ADD — FAB flotante ============ -->
 <div class="qa-fab-wrap" id="qaFabWrap">
-  <button type="button" class="qa-fab" id="qaFabBtn" aria-haspopup="dialog" aria-expanded="false" aria-label="Quick Add" title="Quick Add">
+  <button type="button" class="qa-fab" id="qaFabBtn" aria-haspopup="dialog" aria-expanded="false" aria-label="Añadir rápido" title="Añadir rápido">
     <span class="qa-fab-icon">+</span>
   </button>
 </div>
 
-<!-- ============ QUICK ADD — POPUP DE OPCIONES ============ -->
+<!-- ============ QUICK ADD — popup de opciones ============ -->
 <div class="overlay" id="qaMenuOverlay">
   <div class="modal qa-menu-modal">
     <div class="modal-head">
@@ -980,21 +981,21 @@ main{padding:8px 32px 100px;max-width:1440px;margin:0 auto;}
       <button type="button" class="close-x" data-close="qaMenuOverlay" aria-label="Cerrar">✕</button>
     </div>
     <div class="modal-body">
-      <div class="qa-menu-grid" id="qaSpeedDial">
+      <div class="qa-menu-grid">
         <button type="button" class="qa-option" data-qa-type="character">
-          <span class="qa-option-btn" aria-hidden="true">◆</span>
+          <span class="qa-option-icon" aria-hidden="true">◆</span>
           <span class="qa-option-label">Personaje</span>
         </button>
         <button type="button" class="qa-option" data-qa-type="connection">
-          <span class="qa-option-btn" aria-hidden="true">🔗</span>
+          <span class="qa-option-icon" aria-hidden="true">🔗</span>
           <span class="qa-option-label">Conexión</span>
         </button>
         <button type="button" class="qa-option" data-qa-type="location">
-          <span class="qa-option-btn" aria-hidden="true">⌖</span>
+          <span class="qa-option-icon" aria-hidden="true">⌖</span>
           <span class="qa-option-label">Lugar</span>
         </button>
         <button type="button" class="qa-option" data-qa-type="note">
-          <span class="qa-option-btn" aria-hidden="true">🗒</span>
+          <span class="qa-option-icon" aria-hidden="true">🗒</span>
           <span class="qa-option-label">Nota</span>
         </button>
       </div>
@@ -1002,22 +1003,20 @@ main{padding:8px 32px 100px;max-width:1440px;margin:0 auto;}
   </div>
 </div>
 
-<!-- ============ QUICK ADD — FORMULARIO ============ -->
-<div class="overlay" id="qaFormOverlay">
-  <div class="modal modal-sm">
+<!-- ============ QUICK ADD — modal de creación rápida ============ -->
+<div class="overlay" id="qaQuickOverlay">
+  <div class="modal qa-quick-modal">
     <div class="modal-head">
-      <h2 id="qaFormTitle">Añadir</h2>
-      <button class="close-x" data-close="qaFormOverlay">✕</button>
+      <h2 id="qaQuickTitle">Añadir</h2>
+      <button type="button" class="close-x" data-close="qaQuickOverlay" aria-label="Cerrar">✕</button>
     </div>
-    <div class="modal-body" id="qaFormBody"></div>
+    <div class="modal-body" id="qaQuickBody"></div>
     <div class="modal-foot">
-      <button class="btn btn-ghost" data-close="qaFormOverlay">Cancelar</button>
-      <button class="btn btn-primary" id="qaCreateBtn">Crear</button>
+      <button type="button" class="btn btn-ghost" data-close="qaQuickOverlay">Cancelar</button>
+      <button type="button" class="btn btn-primary" id="qaQuickCreateBtn">Crear</button>
     </div>
   </div>
 </div>
-
-<div id="toast"></div>
 
 <script>
 /* ============================================================
@@ -1275,16 +1274,8 @@ let db = normalizeDB(loadDB());
    ============================================================ */
 function $(sel, ctx){ return (ctx||document).querySelector(sel); }
 function $all(sel, ctx){ return Array.from((ctx||document).querySelectorAll(sel)); }
-function openOverlay(id){
-  $('#'+id).classList.add('open');
-  if(id==='qaMenuOverlay') $('#qaFabBtn').setAttribute('aria-expanded','true');
-  updateFabVisibility();
-}
-function closeOverlay(id){
-  $('#'+id).classList.remove('open');
-  if(id==='qaMenuOverlay') $('#qaFabBtn').setAttribute('aria-expanded','false');
-  updateFabVisibility();
-}
+function openOverlay(id){ $('#'+id).classList.add('open'); updateFabVisibility(); }
+function closeOverlay(id){ $('#'+id).classList.remove('open'); updateFabVisibility(); }
 function fmtDate(d){ if(!d) return '—'; const dt=new Date(d+'T00:00:00'); if(isNaN(dt)) return d; return dt.toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'}); }
 function pct(book){ if(!book.totalPages) return 0; return Math.min(100, Math.round((book.currentPage/book.totalPages)*100)); }
 function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),2200); }
@@ -2440,27 +2431,21 @@ function renderSpotlightResults(q){
 }
 
 /* ============================================================
-   QUICK ADD (FAB flotante + speed dial)
+   QUICK ADD (FAB + popup centrado + creación rápida)
    ============================================================ */
 const QA_LABELS = { character:'Personaje', connection:'Conexión', location:'Lugar', note:'Nota' };
 let qaType = null;
 
+// El FAB solo se oculta en Ajustes; en el resto de pantallas (incluidos otros modales
+// abiertos, como el detalle del libro o la ficha de personaje) permanece visible y
+// utilizable, ya que es la forma rápida de registrar algo mientras se lee.
 function updateFabVisibility(){
-  // El botón de Quick Add se oculta en Ajustes y en cualquier diálogo que ya cubre la
-  // pantalla o es un formulario propio (añadir/editar libro, búsqueda, ficha de personaje,
-  // mapa de relaciones, y el propio formulario de Quick Add), para no flotar encima de ellos.
-  // El popup de opciones (qaMenuOverlay) se trata aparte: el FAB se oculta mientras está
-  // abierto, y solo se fuerza su cierre si OTRO diálogo se abre encima (nunca por sí mismo,
-  // para evitar que se cierre al abrirse o que entre en un bucle de cierre infinito).
-  // Permanece visible en la biblioteca y en el detalle del libro: las dos pantallas
-  // principales donde tiene sentido registrar algo mientras se lee.
-  const hideOn = ['settingsOverlay','bookModalOverlay','spotlightOverlay','treeOverlay','charProfileOverlay','qaFormOverlay'];
-  const menuOpen = $('#qaMenuOverlay').classList.contains('open');
-  const otherOpen = hideOn.some(id=> $('#'+id).classList.contains('open'));
-  $('#qaFabWrap').classList.toggle('is-hidden', menuOpen || otherOpen);
-  if(menuOpen && otherOpen) closeQaMenu();
+  const settingsOpen = $('#settingsOverlay').classList.contains('open');
+  $('#qaFabWrap').classList.toggle('is-hidden', settingsOpen);
 }
 
+// Si el detalle de un libro está abierto, todo lo que se cree con Quick Add se asocia
+// automáticamente a ese libro (sin pedirlo). Si no, el usuario elige el libro.
 function qaActiveBookId(){
   return $('#detailModalOverlay').classList.contains('open') ? currentDetailId : null;
 }
@@ -2468,7 +2453,7 @@ function qaActiveBookId(){
 function openQaMenu(){ openOverlay('qaMenuOverlay'); }
 function closeQaMenu(){ closeOverlay('qaMenuOverlay'); }
 $('#qaFabBtn').addEventListener('click', openQaMenu);
-$all('.qa-option', $('#qaSpeedDial')).forEach(opt=>{
+$all('.qa-option').forEach(opt=>{
   opt.addEventListener('click', ()=>{ closeQaMenu(); openQuickAdd(opt.dataset.qaType); });
 });
 
@@ -2478,23 +2463,23 @@ function qaBookOptions(selectedId){
 
 function openQuickAdd(type){
   qaType = type;
-  $('#qaFormTitle').textContent = 'Añadir ' + QA_LABELS[type].toLowerCase();
-  renderQuickAddForm();
-  openOverlay('qaFormOverlay');
-  setTimeout(()=>{ const el = $('#qaFormBody').querySelector('input,select,textarea'); if(el) el.focus(); }, 30);
+  $('#qaQuickTitle').textContent = 'Añadir ' + QA_LABELS[type].toLowerCase();
+  renderQuickAddBody();
+  openOverlay('qaQuickOverlay');
+  setTimeout(()=>{ const el = $('#qaQuickBody').querySelector('input,select,textarea'); if(el) el.focus(); }, 30);
 }
 
-function renderQuickAddForm(){
-  const body = $('#qaFormBody');
+function renderQuickAddBody(){
+  const body = $('#qaQuickBody');
   const activeId = qaActiveBookId();
   const book = activeId ? getBook(activeId) : null;
 
   if(!db.books.length){
-    body.innerHTML = `<p class="field-hint">Todavía no tienes ningún libro en tu biblioteca. Añade uno primero para poder registrar ${QA_LABELS[qaType].toLowerCase()}s.</p>`;
-    $('#qaCreateBtn').style.display = 'none';
+    body.innerHTML = `<p class="qa-hint">Todavía no tienes ningún libro en tu biblioteca. Añade uno primero para poder registrar ${QA_LABELS[qaType].toLowerCase()}s.</p>`;
+    $('#qaQuickCreateBtn').style.display = 'none';
     return;
   }
-  $('#qaCreateBtn').style.display = '';
+  $('#qaQuickCreateBtn').style.display = '';
 
   const bookPicker = book
     ? `<div class="qa-context-line">📖 En: <b>${escapeHtml(book.title)}</b></div>`
@@ -2536,12 +2521,12 @@ function renderQaConnFields(bookId){
   const wrap = $('#qaConnFields'); if(!wrap) return;
   const b = getBook(bookId);
   if(!b || b.characters.length < 2){
-    wrap.innerHTML = `<p class="field-hint warn">Este libro necesita al menos 2 personajes para crear una conexión. Añade personajes primero.</p>`;
+    wrap.innerHTML = `<p class="qa-hint warn">Este libro necesita al menos 2 personajes para crear una conexión. Añade personajes primero.</p>`;
     return;
   }
   const opts = b.characters.map(c=>`<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
   wrap.innerHTML = `
-    <div class="field-row">
+    <div class="qa-field-row-2">
       <div class="field"><label>Personaje 1 *</label><select id="qaConnFrom">${opts}</select></div>
       <div class="field"><label>Personaje 2 *</label><select id="qaConnTo">${opts}</select></div>
     </div>
@@ -2552,7 +2537,7 @@ function renderQaConnFields(bookId){
   $('#qaConnTo').selectedIndex = Math.min(1, b.characters.length-1);
 }
 
-$('#qaCreateBtn').addEventListener('click', ()=>{
+$('#qaQuickCreateBtn').addEventListener('click', ()=>{
   if(!qaType) return;
   const activeId = qaActiveBookId();
   const bookSelect = $('#qaBookSelect');
@@ -2597,7 +2582,7 @@ $('#qaCreateBtn').addEventListener('click', ()=>{
   if(currentDetailId===b.id && $('#detailModalOverlay').classList.contains('open')){
     renderListPanels(b);
   }
-  closeOverlay('qaFormOverlay');
+  closeOverlay('qaQuickOverlay');
 });
 
 /* ============================================================
