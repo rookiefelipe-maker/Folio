@@ -2448,14 +2448,17 @@ let qaType = null;
 function updateFabVisibility(){
   // El botón de Quick Add se oculta en Ajustes y en cualquier diálogo que ya cubre la
   // pantalla o es un formulario propio (añadir/editar libro, búsqueda, ficha de personaje,
-  // mapa de relaciones, el propio formulario de Quick Add, y su popup de opciones),
-  // para no flotar encima de ellos.
+  // mapa de relaciones, y el propio formulario de Quick Add), para no flotar encima de ellos.
+  // El popup de opciones (qaMenuOverlay) se trata aparte: el FAB se oculta mientras está
+  // abierto, y solo se fuerza su cierre si OTRO diálogo se abre encima (nunca por sí mismo,
+  // para evitar que se cierre al abrirse o que entre en un bucle de cierre infinito).
   // Permanece visible en la biblioteca y en el detalle del libro: las dos pantallas
   // principales donde tiene sentido registrar algo mientras se lee.
-  const hideOn = ['settingsOverlay','bookModalOverlay','spotlightOverlay','treeOverlay','charProfileOverlay','qaFormOverlay','qaMenuOverlay'];
-  const shouldHide = hideOn.some(id=> $('#'+id).classList.contains('open'));
-  $('#qaFabWrap').classList.toggle('is-hidden', shouldHide);
-  if(shouldHide) closeQaMenu();
+  const hideOn = ['settingsOverlay','bookModalOverlay','spotlightOverlay','treeOverlay','charProfileOverlay','qaFormOverlay'];
+  const menuOpen = $('#qaMenuOverlay').classList.contains('open');
+  const otherOpen = hideOn.some(id=> $('#'+id).classList.contains('open'));
+  $('#qaFabWrap').classList.toggle('is-hidden', menuOpen || otherOpen);
+  if(menuOpen && otherOpen) closeQaMenu();
 }
 
 function qaActiveBookId(){
